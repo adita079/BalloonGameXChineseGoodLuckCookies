@@ -1,3 +1,15 @@
+const COOKIE_QUOTES = [
+    "A surprise guest will bring you joy.",
+    "Your kindness will open new doors.",
+    "A journey of a thousand miles begins with a single step.",
+    "Good fortune comes to those who persevere.",
+    "An unexpected opportunity is heading your way.",
+    "Your creativity will lead to great success.",
+    "A wise friend will offer valuable advice soon.",
+    "Happiness is a choice you make every day.",
+    "Your dreams are closer than they appear.",
+    "Kindness repaid will come from an unexpected source."
+];
 
 document.querySelector('#btn').addEventListener("click", () => {
     const header = document.querySelector('header');
@@ -30,7 +42,7 @@ const createBalloons = (gameArea, gameHeader) => {
     let balloonInterval;
 
     const addBalloon = () => {
-        const existing = gameArea.querySelectorAll('.balloon');
+        const existing = gameArea.querySelectorAll('.balloon:not(.cookie-revealed)');
         const areaHeight = gameArea.clientHeight;
         const areaWidth = gameArea.clientWidth;
 
@@ -60,6 +72,9 @@ const createBalloons = (gameArea, gameHeader) => {
 
         } while (overlapping);
 
+        const isCookie = Math.random() < 0.15;
+        const quote = isCookie ? COOKIE_QUOTES[Math.floor(Math.random() * COOKIE_QUOTES.length)] : null;
+
         const balloon = document.createElement('div');
         balloon.classList.add('balloon');
         balloon.style.position = "absolute";
@@ -68,6 +83,7 @@ const createBalloons = (gameArea, gameHeader) => {
         const pastelHues = [0, 25, 45, 140, 200, 280, 330];
         const hue = pastelHues[Math.floor(Math.random() * pastelHues.length)] + (Math.random() * 15 - 5);
         balloon.style.background = `linear-gradient(135deg, hsl(${hue}, 70%, 88%) 0%, hsl(${hue}, 75%, 65%) 100%)`;
+        balloon.dataset.quote = quote || '';
 
         gameArea.appendChild(balloon);
         balloon.addEventListener("click", () => {
@@ -79,10 +95,43 @@ const createBalloons = (gameArea, gameHeader) => {
             const translateY = match ? match[1] + "px" : "0px";
             balloon.style.setProperty("--floatY", translateY);
             balloon.classList.add("popping");
+            if (quote) balloon.dataset.isCookie = 'true';
         });
         balloon.addEventListener("animationend", () => {
-            balloon.classList.remove("popping");
-            balloon.remove();
+            if (balloon.dataset.isCookie === 'true') {
+                balloon.classList.remove("popping");
+                balloon.classList.add("cookie-revealed");
+                balloon.innerHTML = `
+                    <div class="cookie-quote">${quote}</div>
+                    <button class="continue-btn">Continue</button>
+                `;
+                balloon.style.background = 'linear-gradient(180deg, #fff8e7 0%, #f5e6c8 100%)';
+                balloon.style.width = '220px';
+                balloon.style.minHeight = '120px';
+                balloon.style.left = (parseFloat(balloon.style.left) || 0) - 82 + 'px';
+                balloon.style.bottom = (parseFloat(balloon.style.bottom) || 0) - 30 + 'px';
+                balloon.style.borderRadius = '8px';
+                balloon.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+                balloon.style.padding = '16px';
+                balloon.style.display = 'flex';
+                balloon.style.flexDirection = 'column';
+                balloon.style.alignItems = 'center';
+                balloon.style.justifyContent = 'center';
+                balloon.style.gap = '12px';
+                balloon.style.opacity = '1';
+
+                pauseGame();
+                const tadaa = new Audio("img/tadaa.mp3");
+                tadaa.play();
+
+                balloon.querySelector('.continue-btn').addEventListener('click', () => {
+                    balloon.remove();
+                    playGame();
+                });
+            } else {
+                balloon.classList.remove("popping");
+                balloon.remove();
+            }
         });
     };
 

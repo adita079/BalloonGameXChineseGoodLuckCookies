@@ -108,3 +108,27 @@ body{
     animation: pop 0.35s ease-out forwards;
     pointer-events: none;
 }
+.balloon.cookie-revealed {
+    animation: none;
+    pointer-events: auto;
+}
+.cookie-quote {
+    font-family: Amarante, serif;
+    font-size: 1rem;
+    color: #5c4033;
+    text-align: center;
+    line-height: 1.5;
+}
+.continue-btn {
+    padding: 8px 20px;
+    border-radius: 20px;
+    border: none;
+    background: rgb(224, 63, 117);
+    color: white;
+    font-family: Amarante, serif;
+    font-size: 1rem;
+    cursor: pointer;
+}
+.continue-btn:hover {
+    opacity: 0.9;
+}
