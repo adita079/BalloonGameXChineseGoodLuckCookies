@@ -1,4 +1,4 @@
-🎈 Balloon Fortune Game  - click to play :
+🎈 Balloon Fortune Game  - click to play : https://adita079.github.io/BalloonGameXChineseGoodLuckCookies/
 
 A playful browser mini-game where floating balloons rise across the screen. Pop them for fun — and occasionally reveal a hidden fortune cookie with an inspiring quote.
 
